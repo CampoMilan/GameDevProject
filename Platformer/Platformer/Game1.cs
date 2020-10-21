@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Platformer
 {
@@ -10,8 +11,7 @@ namespace Platformer
         private SpriteBatch _spriteBatch;
 
         private Texture2D texture;
-        private Rectangle deelRectangle;
-        private int schuifOp_X = 0;
+        Hero hero;
 
 
         public Game1()
@@ -26,7 +26,7 @@ namespace Platformer
             // TODO: Add your initialization logic here
 
             base.Initialize();
-            deelRectangle = new Rectangle(schuifOp_X, 0, 40, 85);
+            
         }
 
         protected override void LoadContent()
@@ -35,15 +35,23 @@ namespace Platformer
 
             texture = Content.Load<Texture2D>("spritesheetHero");
 
-            // TODO: use this.Content to load your game content here
+            InitializeGameObjects();
+        }
+
+        private void InitializeGameObjects()
+        {
+            hero = new Hero(texture);
         }
 
         protected override void Update(GameTime gameTime)
         {
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             // TODO: Add your update logic here
+
+            hero.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -53,13 +61,11 @@ namespace Platformer
             GraphicsDevice.Clear(Color.Crimson);
 
             _spriteBatch.Begin();
-            _spriteBatch.Draw(texture,new Vector2(10,10), deelRectangle, Color.CornflowerBlue);
+
+            hero.Draw(_spriteBatch);
+
             _spriteBatch.End();
 
-            schuifOp_X += 80;
-            if (schuifOp_X > 700)
-                schuifOp_X = 23;
-            deelRectangle.X = schuifOp_X;
             base.Draw(gameTime);
         }
     }
